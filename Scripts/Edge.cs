@@ -10,7 +10,7 @@ public class Edge : MonoBehaviour {
 	float lineThickness = 0.06f;
 
 	void Awake() {
-
+		pheremone = 0;
 	}
 
 	public void initialize(Vertex start, Vertex end) {

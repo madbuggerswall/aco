@@ -7,6 +7,7 @@ public class Graph : MonoBehaviour {
 
 	GameObject vertexPrefab;
 	GameObject edgePrefab;
+
 	void Awake() {
 		vertexPrefab = Resources.Load("Prefabs/Vertex", typeof(GameObject)) as GameObject;
 		edgePrefab = Resources.Load("Prefabs/Edge", typeof(GameObject)) as GameObject;
@@ -46,5 +47,33 @@ public class Graph : MonoBehaviour {
 		vertex.removeEdges();
 		vertices.Remove(vertex);
 		Destroy(vertex.gameObject);
+	}
+
+	public void disableSource() {
+		foreach (Vertex vertex in vertices) {
+			if (vertex.getIsSource())
+				vertex.toggleIsSource();
+		}
+	}
+
+	public void disableDestination() {
+		foreach (Vertex vertex in vertices) {
+			if (vertex.getIsDestination())
+				vertex.toggleIsDestination();
+		}
+	}
+
+	public Vertex getSource() {
+		foreach (Vertex vertex in vertices)
+			if (vertex.getIsSource())
+				return vertex;
+		return null;
+	}
+	
+	public Vertex getDestination() {
+		foreach (Vertex vertex in vertices)
+			if (vertex.getIsDestination())
+				return vertex;
+		return null;
 	}
 }

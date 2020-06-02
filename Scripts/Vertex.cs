@@ -5,8 +5,14 @@ using UnityEngine;
 public class Vertex : MonoBehaviour {
 	[SerializeField] List<Edge> edges;
 
-	void Awake() {
+	bool isSource;
+	bool isDestination;
 
+	static Color yellow = new Color32(0xFF, 0xFA, 0x00, 0xFF);
+	static Color green = new Color32(0x00, 0xE5, 0x69, 0xFF);
+	static Color red = new Color32(0xFF, 0x00, 0x51, 0xFF);
+
+	void Awake() {
 	}
 
 	public void addEdge(Edge edge) {
@@ -33,5 +39,35 @@ public class Vertex : MonoBehaviour {
 
 	public void removeEdge(Edge edge) {
 		edges.Remove(edge);
+	}
+
+	public void toggleIsDestination() {
+		isDestination = !isDestination;
+		isSource = false;
+		adjustColor();
+	}
+
+	public void toggleIsSource() {
+		isSource = !isSource;
+		isDestination = false;
+		adjustColor();
+	}
+
+	public bool getIsDestination() {
+		return isDestination;
+	}
+
+	public bool getIsSource() {
+		return isSource;
+	}
+
+	void adjustColor() {
+		MeshRenderer renderer = GetComponent<MeshRenderer>();
+		if (isDestination)
+			renderer.material.color = green;
+		else if(isSource)
+			renderer.material.color = red;
+		else
+			renderer.material.color = yellow;
 	}
 }

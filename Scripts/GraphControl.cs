@@ -20,6 +20,9 @@ public class GraphControl : MonoBehaviour {
 	void Update() {
 		dragVertex();
 		addOrRemoveElement();
+		addEdge();
+		toggleSourceOrDestination(KeyCode.S);
+		toggleSourceOrDestination(KeyCode.D);
 	}
 
 	void dragVertex() {
@@ -80,7 +83,9 @@ public class GraphControl : MonoBehaviour {
 				graph.addVertex(vertexPos);
 			}
 		}
+	}
 
+	void addEdge() {
 		if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
 			if (Input.GetMouseButtonDown(0)) {
 				RaycastHit hitInfo;
@@ -94,6 +99,25 @@ public class GraphControl : MonoBehaviour {
 						start = null;
 						end = null;
 					}
+				}
+			}
+		}
+	}
+
+	void toggleSourceOrDestination(KeyCode keyCode) {
+		if (Input.GetKey(keyCode) && Input.GetMouseButtonDown(0)) {
+			RaycastHit hitInfo;
+			GameObject clickedObject = getClickedObject(out hitInfo);
+			if (clickedObject != null && clickedObject.GetComponent<Vertex>() != null) {
+				Vertex vertex = clickedObject.GetComponent<Vertex>();
+				if (keyCode == KeyCode.S) {
+					if (!vertex.getIsSource())
+						graph.disableSource();
+					vertex.toggleIsSource();
+				} else if (keyCode == KeyCode.D) {
+					if (!vertex.getIsDestination())
+						graph.disableDestination();
+					vertex.toggleIsDestination();
 				}
 			}
 		}
