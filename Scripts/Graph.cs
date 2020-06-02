@@ -43,6 +43,17 @@ public class Graph : MonoBehaviour {
 		edge.transform.SetParent(this.transform);
 	}
 
+	public Edge findEdge(Vertex start, Vertex end) {
+		foreach (Edge startEdge in start.getEdges()) {
+			foreach (Edge endEdge in end.getEdges()) {
+				if (startEdge == endEdge) {
+					return startEdge;
+				}
+			}
+		}
+		return null;
+	}
+
 	public void removeVertex(Vertex vertex) {
 		vertex.removeEdges();
 		vertices.Remove(vertex);
@@ -69,7 +80,7 @@ public class Graph : MonoBehaviour {
 				return vertex;
 		return null;
 	}
-	
+
 	public Vertex getDestination() {
 		foreach (Vertex vertex in vertices)
 			if (vertex.getIsDestination())

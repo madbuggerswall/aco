@@ -19,6 +19,10 @@ public class Vertex : MonoBehaviour {
 		edges.Add(edge);
 	}
 
+	public List<Edge> getEdges(){
+		return edges;
+	}
+
 	public void updateEdges() {
 		foreach (Edge edge in edges) {
 			edge.updatePosition();
