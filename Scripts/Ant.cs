@@ -5,17 +5,18 @@ using UnityEngine;
 
 public class Ant : MonoBehaviour {
 	bool reachedDestination;
-	float speed = 4f;
-	float pheremoneDeposit = 1f;
-
+	public static float speed = 4f;
+	public static float pheromoneDeposit = 1f;
+	Edge previousEdge;
+	Edge chosenEdge;
 	[SerializeField] Vertex target;
 	[SerializeField] List<Vertex> pathTraveled;
-	[SerializeField] List<Edge> chosenEdges;
 	// Start is called before the first frame update
 	void Start() {
 		reachedDestination = false;
 		pathTraveled.Add(target);
-		chooseEdge().addPheremone(pheremoneDeposit);
+		chosenEdge = chooseEdge();
+		chosenEdge.addPheromone(pheromoneDeposit);
 		pathTraveled.Add(target);
 	}
 
@@ -37,12 +38,12 @@ public class Ant : MonoBehaviour {
 					Vertex prevTarget = target;
 					target = pathTraveled[pathTraveled.Count - 1];
 					pathTraveled.RemoveAt(pathTraveled.Count - 1);
-					FindObjectOfType<Graph>().findEdge(prevTarget, target).addPheremone(pheremoneDeposit);
+					FindObjectOfType<Graph>().findEdge(prevTarget, target).addPheromone(pheromoneDeposit);
 				} else {
-					Edge chosenEdge = chooseEdge();
-					chosenEdge.addPheremone(pheremoneDeposit);
+					previousEdge = chosenEdge;
+					chosenEdge = chooseEdge();
+					chosenEdge.addPheromone(pheromoneDeposit);
 					pathTraveled.Add(target);
-					chosenEdges.Add(chosenEdge);
 				}
 			}
 		}
@@ -54,17 +55,19 @@ public class Ant : MonoBehaviour {
 	}
 
 	Edge chooseEdge() {
-		List<Edge> edges = target.getEdges().Except(chosenEdges).ToList();
+		List<Edge> edges = new List<Edge>(target.getEdges());
+		if (edges.Contains(previousEdge))
+			edges.Remove(previousEdge);
 		Edge chosenEdge = null;
 		float upperLimit = 0;
 		foreach (Edge edge in edges) {
-			upperLimit += edge.getPheremone();
+			upperLimit += edge.getPheromone();
 		}
 
 		float chosenRange = Random.Range(0f, upperLimit);
 		float probSum = 0;
 		for (int i = 0; i < edges.Count; i++) {
-			float edgeProbability = edges[i].getPheremone();
+			float edgeProbability = edges[i].getPheromone();
 			probSum += edgeProbability;
 			if (probSum >= chosenRange) {
 				chosenEdge = edges[i];
@@ -75,7 +78,6 @@ public class Ant : MonoBehaviour {
 				break;
 			}
 		}
-		chosenEdges.Clear();
 		return chosenEdge;
 	}
 

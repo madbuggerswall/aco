@@ -6,12 +6,13 @@ public class Edge : MonoBehaviour {
 	Vertex start;
 	Vertex end;
 	float cost;
-	float pheremone;
-	public static float evaporizationSpeed = 0.5f;
-	public static float lineThickness = 0.06f;
+	float pheromone;
+	public static float maxPheromone = 20f;
+	public static float evaporationRate = 2f;
+	public static float lineThickness = 0.04f;
 
 	void Awake() {
-		pheremone = 1;
+		pheromone = 1;
 	}
 
 	void Update() {
@@ -19,13 +20,13 @@ public class Edge : MonoBehaviour {
 	}
 
 	void adjustColor() {
-		float green = pheremone * 20 / 255f;
+		float green = pheromone * 20 / 255f;
 		GetComponent<MeshRenderer>().material.color = new Color(0, green, 1f);
 	}
 
 	void evaporate() {
-		if (pheremone > 1f) {
-			pheremone -= evaporizationSpeed * Time.deltaTime;
+		if (pheromone > 1f) {
+			pheromone -= evaporationRate * Time.deltaTime;
 			adjustColor();
 		}
 	}
@@ -58,13 +59,14 @@ public class Edge : MonoBehaviour {
 		Destroy(gameObject);
 	}
 
-	public void addPheremone(float pheremone) {
-		this.pheremone += pheremone;
+	public void addPheromone(float pheromone) {
+		this.pheromone += pheromone;
+		this.pheromone = Mathf.Clamp(this.pheromone, 1, maxPheromone);
 		adjustColor();
 	}
 
-	public float getPheremone() {
-		return pheremone;
+	public float getPheromone() {
+		return pheromone;
 	}
 
 	public Vertex getStart() {
