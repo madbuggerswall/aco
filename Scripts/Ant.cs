@@ -8,6 +8,7 @@ public class Ant : MonoBehaviour {
 	bool destVisited;
 	public static float speed = 4f;
 	public static float pheromoneDeposit = 1f;
+	public static float solutionMultiplier = 2f;
 	Edge previousEdge;
 	Edge chosenEdge;
 	[SerializeField] Vertex target;
@@ -38,7 +39,7 @@ public class Ant : MonoBehaviour {
 					Vertex prevTarget = target;
 					target = pathTraveled[pathTraveled.Count - 1];
 					pathTraveled.RemoveAt(pathTraveled.Count - 1);
-					FindObjectOfType<Graph>().findEdge(prevTarget, target).addPheromone(pheromoneDeposit);
+					FindObjectOfType<Graph>().findEdge(prevTarget, target).addPheromone(pheromoneDeposit * solutionMultiplier);
 				} else {
 					previousEdge = chosenEdge;
 					chosenEdge = chooseEdge();
