@@ -20,6 +20,9 @@ public class AntGenerator : MonoBehaviour {
 				generate();
 			}
 		}
+		if (Input.GetKeyDown(KeyCode.A)) {
+				generate();
+		}
 	}
 
 	public void generate() {

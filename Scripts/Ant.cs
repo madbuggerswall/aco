@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Ant : MonoBehaviour {
 	bool reachedDestination;
+	bool destVisited;
 	public static float speed = 4f;
 	public static float pheromoneDeposit = 1f;
 	Edge previousEdge;
@@ -26,9 +27,8 @@ public class Ant : MonoBehaviour {
 			Vector3 direction = (target.transform.position - transform.position).normalized;
 			transform.Translate(direction * speed * Time.deltaTime);
 		} else {
-			if (target.getIsDestination()) {
+			if (target.getIsDestination() && !reachedDestination) {
 				reachedDestination = true;
-				target = pathTraveled[pathTraveled.Count - 1];
 				pathTraveled.RemoveAt(pathTraveled.Count - 1);
 			} else if (target.getIsSource() && reachedDestination) {
 				Destroy(gameObject);
